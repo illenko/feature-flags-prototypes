@@ -25,6 +25,18 @@ class PayController(
                     .add("paymentMethod", request.paymentMethod),
             )
 
+        val isNewFlowEnabledDetails =
+            featureClient.getBooleanDetails(
+                "test-flow",
+                false,
+                MutableContext(request.terminalId)
+                    .add("amount", request.amount.toInt())
+                    .add("currency", request.currency)
+                    .add("paymentMethod", request.paymentMethod),
+            )
+
+        println(isNewFlowEnabledDetails)
+
         return PayResponse(
             "${if (isNewFlowEnabled) "NEW" else "OLD"} flow applied for terminal ${request.terminalId}, " +
                 "amount ${request.amount}, currency ${request.currency}, payment method ${request.paymentMethod}",

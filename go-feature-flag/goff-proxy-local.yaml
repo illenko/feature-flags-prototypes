@@ -1,0 +1,4 @@
+debug: true
+retrievers:
+  - kind: file
+    path: /goff/flag-config.yaml
