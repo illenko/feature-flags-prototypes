@@ -27,13 +27,13 @@ class PayController(
             )
 
         val isNewFlowEnabled =
-            featureClient.getStringValue(
+            featureClient.getBooleanValue(
                 "test-flow",
-                "off",
+                false,
                 context,
             )
 
-        return if (isNewFlowEnabled == "on") {
+        return if (isNewFlowEnabled) {
             PayResponse("New flow enabled for terminal ${request.terminalId}")
         } else {
             PayResponse("Old flow enabled for terminal ${request.terminalId}")
