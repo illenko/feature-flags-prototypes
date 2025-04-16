@@ -2,6 +2,7 @@ package com.example.gff.api
 
 import dev.openfeature.sdk.Client
 import dev.openfeature.sdk.MutableContext
+import mu.KotlinLogging
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -11,6 +12,8 @@ import java.util.UUID
 class PayController(
     private val featureClient: Client,
 ) {
+    private val log = KotlinLogging.logger {}
+
     @PostMapping("/pay")
     fun pay(
         @RequestBody request: PayRequest,
@@ -35,7 +38,9 @@ class PayController(
                     .add("paymentMethod", request.paymentMethod),
             )
 
-        println(isNewFlowEnabledDetails)
+        log.info {
+            "Feature flag details: ${isNewFlowEnabledDetails.reason} - ${isNewFlowEnabledDetails.variant}"
+        }
 
         return PayResponse(
             "${if (isNewFlowEnabled) "NEW" else "OLD"} flow applied for terminal ${request.terminalId}, " +
@@ -54,10 +59,4 @@ data class PayRequest(
 
 data class PayResponse(
     val details: String,
-)
-
-data class GenerationData(
-    val firstName: Boolean,
-    val lastName: Boolean,
-    val email: Boolean,
 )

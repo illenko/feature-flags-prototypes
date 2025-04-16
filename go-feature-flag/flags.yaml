@@ -3,7 +3,7 @@ test-flow:
     enabled: true
     disabled: false
   targeting:
-    - query: (targetingKey eq "terminal-1") and (currency eq "USD") and (amount > 100)
+    - query: (targetingKey eq "terminal-1") and (currency eq "USD") and (amount > 50)
       variation: enabled
   defaultRule:
     variation: disabled
