@@ -25,11 +25,10 @@ class PayController(
                     .add("paymentMethod", request.paymentMethod),
             )
 
-        return if (isNewFlowEnabled) {
-            PayResponse("New flow enabled for terminal ${request.terminalId}")
-        } else {
-            PayResponse("Old flow enabled for terminal ${request.terminalId}")
-        }
+        return PayResponse(
+            "${if (isNewFlowEnabled) "NEW" else "OLD"} flow applied for terminal ${request.terminalId}, " +
+                "amount ${request.amount}, currency ${request.currency}, payment method ${request.paymentMethod}",
+        )
     }
 }
 
