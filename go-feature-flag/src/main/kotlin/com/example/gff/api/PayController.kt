@@ -1,8 +1,7 @@
 package com.example.gff.api
 
 import dev.openfeature.sdk.Client
-import dev.openfeature.sdk.ImmutableContext
-import dev.openfeature.sdk.Value
+import dev.openfeature.sdk.MutableContext
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -16,21 +15,14 @@ class PayController(
     fun pay(
         @RequestBody request: PayRequest,
     ): PayResponse {
-        val context =
-            ImmutableContext(
-                mapOf(
-                    "terminalId" to Value(request.terminalId),
-                    "amount" to Value(request.amount),
-                    "currency" to Value(request.currency),
-                    "paymentMethod" to Value(request.paymentMethod),
-                ),
-            )
-
         val isNewFlowEnabled =
             featureClient.getBooleanValue(
                 "test-flow",
                 false,
-                context,
+                MutableContext(request.terminalId)
+                    .add("amount", request.amount.toInt())
+                    .add("currency", request.currency)
+                    .add("paymentMethod", request.paymentMethod),
             )
 
         return if (isNewFlowEnabled) {

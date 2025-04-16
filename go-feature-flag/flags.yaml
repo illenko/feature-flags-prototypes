@@ -2,5 +2,8 @@ test-flow:
   variations:
     enabled: true
     disabled: false
+  targeting:
+    - query: targetingKey eq "terminal-1"
+      variation: enabled
   defaultRule:
-    variation: enabled
+    variation: disabled
