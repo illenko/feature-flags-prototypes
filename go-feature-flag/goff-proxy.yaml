@@ -1,0 +1,4 @@
+retrievers:
+  - kind: github
+    repositorySlug: illenko/feature-flags-prototypes
+    path: go-feature-flag/flags.yaml
