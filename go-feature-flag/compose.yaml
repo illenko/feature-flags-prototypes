@@ -7,3 +7,4 @@ services:
       - "1031:1031"
     volumes:
       - ./goff-proxy.yaml:/goff/goff-proxy.yaml
+      - ./flags-local.yaml:/goff/flags-local.yaml

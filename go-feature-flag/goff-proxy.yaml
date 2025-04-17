@@ -2,3 +2,5 @@ retrievers:
   - kind: github
     repositorySlug: illenko/feature-flags-prototypes
     path: go-feature-flag/flags.yaml
+  - kind: file
+    path: /goff/flags-local.yaml
