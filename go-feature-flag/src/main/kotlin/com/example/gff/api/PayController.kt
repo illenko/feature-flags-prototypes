@@ -35,17 +35,13 @@ class PayController(
         }
 
         val generationData =
-            objectMapper.readValue(
-                featureClient.getStringValue(
-                    "generation",
-                    "{ \"firstName\": false, \"lastName\": false, \"email\": false }",
-                    MutableContext(request.id.toString())
-                        .add("terminalId", request.terminalId)
-                        .add("amount", request.amount.toInt())
-                        .add("currency", request.currency)
-                        .add("paymentMethod", request.paymentMethod),
-                ),
-                GenerationData::class.java,
+            featureClient.getObject(
+                "generation",
+                defaultGenerationData,
+                MutableContext(request.terminalId)
+                    .add("amount", request.amount.toInt())
+                    .add("currency", request.currency)
+                    .add("paymentMethod", request.paymentMethod),
             )
 
         log.info { "Generation data: $generationData" }
@@ -54,6 +50,30 @@ class PayController(
             "${if (isNewFlowEnabledDetails.value) "NEW" else "OLD"} flow applied for terminal ${request.terminalId}, " +
                 "amount ${request.amount}, currency ${request.currency}, payment method ${request.paymentMethod}",
         )
+    }
+
+    private inline fun <reified T> Client.getObject(
+        key: String,
+        defaultValue: T,
+        context: MutableContext,
+    ): T =
+        getStringDetails(key, objectMapper.writeValueAsString(defaultValue), context).let {
+            try {
+                log.info { "Retrieved $key: $it" }
+                objectMapper.readValue(it.value, T::class.java)
+            } catch (e: Exception) {
+                log.error(e) { "Failed to parse object from string: $it" }
+                defaultValue
+            }
+        }
+
+    companion object {
+        private val defaultGenerationData =
+            GenerationData(
+                firstName = false,
+                lastName = false,
+                email = false,
+            )
     }
 }
 
