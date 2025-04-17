@@ -1,9 +1,12 @@
 generation:
   variations:
-    enabled: true
-    disabled: false
+    usd: '{ "firstName": true, "lastName": true, "email": false }'
+    uah: '{ "firstName": false, "lastName": true, "email": false }'
+    default: '{ "firstName": false, "lastName": false, "email": false }'
   targeting:
-    - query: (targetingKey eq "terminal-1") and (currency eq "USD") and (amount > 50)
-      variation: enabled
+    - query: (currency eq "USD")
+      variation: usd
+    - query: (currency eq "UAH")
+      variation: uah
   defaultRule:
-    variation: disabled
+    variation: default
