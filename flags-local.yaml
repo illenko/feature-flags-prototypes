@@ -1,12 +1,16 @@
-generation:
+
+securityChecks:
   variations:
-    usd: '{ "firstName": true, "lastName": true, "email": false }'
-    uah: '{ "firstName": false, "lastName": true, "email": false }'
-    default: '{ "firstName": false, "lastName": false, "email": false }'
+    high: '{ "fraudDetection": true, "addressVerification": true, "threeDS": true }'
+    medium: '{ "fraudDetection": true, "addressVerification": true, "threeDS": false }'
+    low: '{ "fraudDetection": true, "addressVerification": false, "threeDS": false }'
+    none: '{ "fraudDetection": false, "addressVerification": false, "threeDS": false }'
   targeting:
-    - query: (currency eq "USD")
-      variation: usd
-    - query: (currency eq "UAH")
-      variation: uah
+    - query: (amount > 1000) or (paymentMethod eq "crypto")
+      variation: high
+    - query: (amount > 500) or (paymentMethod eq "card")
+      variation: medium
+    - query: (amount > 100)
+      variation: low
   defaultRule:
-    variation: default
+    variation: none

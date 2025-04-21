@@ -11,15 +11,15 @@ import org.springframework.context.annotation.Configuration
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class OpenFeatureConfig {
+class OpenFeatureConfig(private val properties: GoFeatureFlagProperties) {
     @Bean
     fun openFeatureClient(): Client {
         val cache =
             Caffeine
                 .newBuilder()
-                .expireAfterWrite(1, TimeUnit.MINUTES)
-                .maximumSize(1000)
-                .initialCapacity(100) as Caffeine<String, ProviderEvaluation<*>>
+                .expireAfterWrite(properties.cache.expirationTimeMinutes, TimeUnit.MINUTES)
+                .maximumSize(properties.cache.maximumSize)
+                .initialCapacity(properties.cache.initialCapacity) as Caffeine<String, ProviderEvaluation<*>>
 
         return OpenFeatureAPI
             .getInstance()
@@ -28,8 +28,8 @@ class OpenFeatureConfig {
                     GoFeatureFlagProvider(
                         GoFeatureFlagProviderOptions
                             .builder()
-                            .endpoint("http://localhost:1031/")
-                            .enableCache(true)
+                            .endpoint(properties.endpoint)
+                            .enableCache(properties.cache.enabled)
                             .cacheConfig(cache)
                             .build(),
                     )

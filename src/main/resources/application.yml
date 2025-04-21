@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: gff
+
+# Go Feature Flag Configuration
+feature-flag:
+  go-feature-flag:
+    endpoint: http://localhost:1031/
+    cache:
+      enabled: true
+      expiration-time-minutes: 1
+      maximum-size: 1000
+      initial-capacity: 100

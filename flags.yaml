@@ -1,9 +1,41 @@
-test-flow:
+paymentMethodFee:
+  variations:
+    card: 2.5
+    bank: 1.0
+    crypto: 3.0
+    default: 1.5
+  targeting:
+    - query: (paymentMethod eq "card")
+      variation: card
+    - query: (paymentMethod eq "bank")
+      variation: bank
+    - query: (paymentMethod eq "crypto")
+      variation: crypto
+  defaultRule:
+    variation: default
+
+discountProgram:
+  variations:
+    none: "none"
+    standard: "standard"
+    premium: "premium"
+    seasonal: "seasonal"
+  targeting:
+    - query: (amount > 1000)
+      variation: premium
+    - query: (amount > 500)
+      variation: standard
+    - query: (currency eq "USD") and (amount > 100)
+      variation: seasonal
+  defaultRule:
+    variation: none
+
+uiCustomization:
   variations:
     enabled: true
     disabled: false
   targeting:
-    - query: (targetingKey eq "terminal-1") and (currency eq "USD") and (amount > 50)
+    - query: (targetingKey eq "123e4567-e89b-12d3-a456-426614174000") or (targetingKey eq "223e4567-e89b-12d3-a456-426614174001")
       variation: enabled
   defaultRule:
     variation: disabled
